@@ -1,0 +1,375 @@
+27 sep 2021
+
+Topics :
+1. Intro to Node.js
+2. Architecture
+3. Installation
+4. Global Object
+5. Module System
+6. Module Wrapper Function
+7. Inbuilt Modules
+    1. fs, os, http
+8. Custom Modules
+    1. module.exports
+    2. require()
+    
+///console.log is inside a global  object like window object in DOM 
+// here is the example 
+console.log("welcome to Node ");
+global.console.log("welcome to Node ");
+
+///if we  do like console.log(window) then it will give us error as reference error mmeans window is not defined 
+ console.log(window);
+
+///index.js 
+const log = require("./log"); // here printMsg of another file log.js  passing to const log 
+console.log(log);
+
+//log.js 
+function printMsg(msg) {
+    console.log(msg)
+}
+module.exports = printMsg;
+
+
+/// here it will return both the logger and printMsg function
+// log.js
+function printMsg(msg) {
+    console.log(msg)
+}
+function logger(msg) {
+    console.log(msg)
+}
+module.exports = printMsg;
+module.exports = logger;
+
+// index.js 
+const log = require("./log");
+console.log(log);
+
+
+/// we can do  the same thing like this also in program
+// index.js
+const log = require("./log");
+console.log(log);
+
+//log.js
+function printMsg(msg) {
+    console.log(msg)
+}
+function logger(msg) {
+    console.log(msg)
+}
+module.exports = {
+    printMsg,
+    logger,
+};
+
+///we can do  the same thing like this also in above program
+//log.js
+function printMsg(msg) {
+    console.log(msg)
+}
+function logger(msg) {
+    console.log(msg)
+}
+
+const test = "Guvi";
+
+module.exports.printMsg = printMsg;
+module.exports.logger = logger;
+
+
+
+
+///we also can add new properties like this 
+//log.js
+function printMsg(msg) {
+    console.log(msg)
+}
+function logger(msg) {
+    console.log(msg)
+}
+
+const test = "Guvi";
+
+module.exports = {
+    printMsg,
+    logger,
+    test,
+    age: 21,
+};
+// index.js same as previous
+
+/// we can print the value  by  creating object of functions in log.js fileor another file like this 
+// index.js
+const logger = require("./log");
+logger.print("mofnjdn");
+logger.log("hvhvn");
+
+// log .js
+function printMsg(msg) {
+    console.log(msg)
+}
+function logger(msg) {
+    console.log(msg)
+}
+
+const obj = {
+    print: printMsg,
+    log: logger,
+};
+
+module.exports = obj;
+
+
+/// here module.export is not inside in global then we will get error here  means module, require ,module.export not inside in global object because they are passing as parameter in iifa function 
+// index.js - same as previous 
+//log.js
+function printMsg(msg) {
+    console.log(msg)
+}
+function logger(msg) {
+    console.log(msg)
+}
+
+const obj = {
+    print: printMsg,
+    log: logger,
+};
+
+global.module.exports = obj;
+
+/// module wrapper function written like this 
+((exports, require, module, _filename, _dirname) =>
+{function printMsg(msg) {
+    console.log(msg)
+}
+function logger(msg) {
+    console.log(msg)
+}
+
+const obj = {
+    print: printMsg,
+    log: logger,
+};
+})
+module.exports = obj;
+
+/// we  can't  access like this it will give some error 
+//log.js
+
+function printMsg(msg) {
+    console.log(msg)
+}
+function logger(msg) {
+    console.log(msg)
+}
+
+const obj = {
+    print: printMsg,
+    log: logger,
+};
+
+exports = printMsg;
+exports = logger;
+
+//index.js
+const logger = require("./log");
+logger.print("mofnjdn");
+logger.log("hvhvn");
+
+
+/// we can access api like
+const axios = require("axios");
+
+///inbuilt modules
+// index.js 
+// fs 
+const fs = require("fs");
+console.log(fs);
+
+/// to read the files 
+const fs = require("fs");
+fs.readdir(".",(err,files) => {
+    if(err) console.log("error reading directory");
+    else console.log(files);
+});
+
+// o/p of above program like this 
+['index.js', 'log.js' ]
+
+///index.js 
+// to read  files from outside 
+// fs  
+const fs = require("fs");
+fs.readdir("..",(err,files) => {
+    if(err) console.log("error reading directory");
+    else console.log(files);
+});
+
+/// index.js  
+//posts 
+//Asynchronous
+
+const fs = require("fs");
+fs.readdir(".",(err,files) => {
+    if(err) console.log("error reading directory");
+    else console.log(files);
+});
+
+// posts 
+//  Synchronous 
+fs.readdirSync(".");
+
+///to cheeck the total memoryb and free memory
+// index.js 
+const os = require("os");
+console.log(os.totalmem());
+console.log(os.freemem());
+
+///index.js
+const os = require("os");
+console.log(os.platform());
+
+O/p :- win 32 
+
+/// index.js
+const os = require("os");
+console.log(os.platform());
+
+O/p :- x64
+
+/// creating a server 
+//index.js
+const http = require("http");
+
+
+const server = http.createServer((req, res)  => {
+    console.log(req.headers);
+
+});
+server.listen(3001);
+ console.log("Server running at port 3001");
+
+
+
+/// index.js
+
+const http = require("http");
+const port = 3001;
+
+const server = http.createServer((req, res)  => {
+    console.log(req.method);
+});
+server.listen(port);
+ console.log("Server running at port 3001");
+
+
+
+/// index.js
+
+const http = require("http");
+
+
+const server = http.createServer((req, res)  => {
+    console.log(req.headers);
+
+});
+server.listen(3001);
+ console.log("Server running at port 3001");
+
+///index.js
+const http = require("http");
+
+
+const server = http.createServer((req, res)  => {
+    console.log(req.url);
+
+});
+server.listen(3001);
+ console.log("Server running at port 3001");
+
+
+///index.js
+// format 
+const http = require("http");
+
+
+const server = http.createServer((req, res)  => {
+   if(req.url === "/posts") {
+       if(req.method === "GET"){
+           //
+       }
+        else if(req.url === "/POST") {
+    //
+} else if(req.url === "/PUT") {
+    //
+} else if(req.url === "/DELETE") {
+    //
+}
+   }
+
+});
+server.listen(3001);
+ console.log("Server running at port 3001");
+
+
+/// here it's just  like a  Api
+// for that after execute we have to do on url bar on browser like http://localhost:3001/posts or http://localhost:3001/users then we get output as Api
+// index.js
+const http = require("http");
+
+const posts = [
+    {
+        "userId": 1,
+        "id": 1,
+        "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+        "body": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
+      },
+      {
+        "userId": 1,
+        "id": 2,
+        "title": "qui est esse",
+        "body": "est rerum tempore vitae\nsequi sint nihil reprehenderit dolor beatae ea dolores neque\nfugiat blanditiis voluptate porro vel nihil molestiae ut reiciendis\nqui aperiam non debitis possimus qui neque nisi nulla"
+      },
+];
+const users = [
+    {
+        "id": 1,
+        "name": "Leanne Graham",
+        "username": "Bret",
+        "email": "Sincere@april.biz",
+        "address": {
+          "street": "Kulas Light",
+          "suite": "Apt. 556",
+          "city": "Gwenborough",
+          "zipcode": "92998-3874",
+          "geo": {
+            "lat": "-37.3159",
+            "lng": "81.1496"
+          }
+        },
+        "phone": "1-770-736-8031 x56442",
+        "website": "hildegard.org",
+        "company": {
+          "name": "Romaguera-Crona",
+          "catchPhrase": "Multi-layered client-server neural-net",
+          "bs": "harness real-time e-markets"
+        }
+      },
+
+]
+const server = http.createServer((req, res)  => {
+   if(req.url === "/posts" && req.method === "GET" ) {
+           res.write(JSON.stringify(posts));
+           res.end();
+       } else if(req.url === "/users" && req.method === "GET" ) {
+        res.write(JSON.stringify(users));
+        res.end();
+   
+   }
+
+});
+server.listen(3001);
+ console.log("Server running at port 3001");
